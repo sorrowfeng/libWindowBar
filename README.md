@@ -1,0 +1,2 @@
+# libWindowBar
+搭配QWindowKit使用的windowbar组件, 从QWindowKit中单独提取出来
