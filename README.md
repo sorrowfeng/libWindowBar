@@ -1,6 +1,10 @@
 # libWindowBar
 搭配QWindowKit使用的windowbar组件, 从QWindowKit中单独提取出来
 
+# 示例图
+
+![250628101627049.png](https://fastly.jsdelivr.net/gh/sorrowfeng/ImageHub@main/2025-06/250628101627049_1751076987077.png)
+
 # 使用说明
 
 cmake导入
