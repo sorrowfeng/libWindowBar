@@ -76,6 +76,9 @@ namespace QWK {
      protected:
       bool eventFilter(QObject* obj, QEvent* event) override;
 
+      void mousePressEvent(QMouseEvent* event) override;
+      void mouseDoubleClickEvent(QMouseEvent* event) override;
+
       virtual void titleChanged(const QString& text);
       virtual void iconChanged(const QIcon& icon);
 

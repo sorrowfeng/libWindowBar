@@ -1,4 +1,4 @@
-// Copyright (C) 2023-2024 Stdware Collections (https://www.github.com/stdware)
+﻿// Copyright (C) 2023-2024 Stdware Collections (https://www.github.com/stdware)
 // Copyright (C) 2021-2023 wangwenx190 (Yuhang Zhao)
 // SPDX-License-Identifier: Apache-2.0
 
@@ -9,6 +9,11 @@
 #include <QtCore/QDebug>
 #include <QtCore/QLocale>
 #include <QtGui/QtEvents>
+#include <QMouseEvent>
+#include <QWindow>
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
 
 namespace QWK {
 
@@ -323,6 +328,54 @@ namespace QWK {
             }
         }
         return QWidget::eventFilter(obj, event);
+    }
+
+    void WindowBar::mousePressEvent(QMouseEvent* event)
+    {
+        if (event->button() == Qt::LeftButton)
+        {
+            // 忽略按钮区域（交给 QWK::WindowButton 自己处理）
+            QWidget* child = childAt(event->pos());
+            if (qobject_cast<QAbstractButton*>(child))
+            {
+                return QWidget::mousePressEvent(event);
+            }
+
+            // 获取原生窗口句柄
+            WId wid = window()->winId();
+            if (!wid)
+                return;
+
+#ifdef Q_OS_WIN
+            HWND hwnd = (HWND)wid;
+            POINT pos = {event->pos().x(), event->pos().y()};
+            ClientToScreen(hwnd, &pos);  // 转换为屏幕坐标
+            LPARAM lParam = MAKELPARAM(pos.x, pos.y);
+
+            // 关键：手动发送系统消息
+            ReleaseCapture();
+            PostMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
+#endif
+
+            event->accept();
+            return;
+        }
+        QWidget::mousePressEvent(event);
+    }
+
+    void WindowBar::mouseDoubleClickEvent(QMouseEvent* event)
+    {
+        if (event->button() == Qt::LeftButton)
+        {
+            QWidget* child = childAt(event->pos());
+            if (!qobject_cast<QAbstractButton*>(child))
+            {
+                emit maximizeRequested(!window()->isMaximized());
+                event->accept();
+                return;
+            }
+        }
+        QWidget::mouseDoubleClickEvent(event);
     }
 
     void WindowBar::titleChanged(const QString &text) {

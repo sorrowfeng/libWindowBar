@@ -8,6 +8,14 @@
         <file>window-bar/more-line.svg</file>
         <file>window-bar/pin.svg</file>
         <file>window-bar/pin-fill.svg</file>
+        <file>window-bar/close_invert.svg</file>
+        <file>window-bar/fullscreen_invert.svg</file>
+        <file>window-bar/maximize_invert.svg</file>
+        <file>window-bar/minimize_invert.svg</file>
+        <file>window-bar/restore_invert.svg</file>
+        <file>window-bar/more-line_invert.svg</file>
+        <file>window-bar/pin_invert.svg</file>
+        <file>window-bar/pin-fill_invert.svg</file>
         <file>style/light-style.qss</file>
         <file>style/dark-style.qss</file>
     </qresource>
