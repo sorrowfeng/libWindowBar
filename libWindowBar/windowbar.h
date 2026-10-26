@@ -10,6 +10,13 @@
 #include <QMenuBar>
 #include <QLabel>
 
+// 资源初始化函数由 rcc 生成在全局命名空间(qrc_resource.cpp)。
+// 若在 namespace QWK 内直接展开 Q_INIT_RESOURCE,宏内的 extern 声明会把
+// 函数声明成 QWK::qInitResources_resource,而定义始终是全局的 ——
+// GCC/ld 在 Linux 上会因此报 undefined reference(libWindowBar 是静态库,
+// 被链进 ADS/SARibbon 共享库时必须能找到定义)。
+extern int qInitResources_resource();
+
 namespace QWK {
 
     class WindowBarPrivate;
@@ -27,7 +34,7 @@ namespace QWK {
       ~WindowBar();
 
       static void initResource() {
-        Q_INIT_RESOURCE(resource);  // 初始化资源
+        ::qInitResources_resource();  // 初始化资源(定义在全局命名空间)
       }
 
      public:
